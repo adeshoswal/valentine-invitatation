@@ -7,6 +7,8 @@
   const modalTitle = document.getElementById('modalTitle');
   const sealKissBtn = document.getElementById('sealKiss');
   const kissCanvas = document.getElementById('kissCanvas');
+  const finalMessage = document.getElementById('finalMessage');
+  const countdownEl = document.getElementById('countdown');
 
   // Romantic audio
   const romanticAudio = new Audio('Main Tera Boyfriend Raabta 320 Kbps.mp3');
@@ -233,6 +235,30 @@
     setTimeout(() => kissCanvas.classList.add('hidden'), 3000);
   }
 
+  // Countdown to 7th February
+  function startCountdown() {
+    const targetDate = new Date('2026-02-07T00:00:00').getTime();
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+      
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      if (distance > 0) {
+        countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s until our first date`;
+      } else {
+        countdownEl.textContent = "It's time! 💕";
+      }
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+
   noBtn.addEventListener('click', () => {
     const prev = noBtn.textContent;
     noBtn.textContent = "Oh... you caught me!";
@@ -250,6 +276,26 @@
   // Seal with kiss button
   sealKissBtn.addEventListener('click', () => {
     drawKiss();
+    
+    // Clear all scratch canvases
+    const allCanvases = document.querySelectorAll('.scratch-canvas');
+    allCanvases.forEach(canvas => {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    
+    // Stop music
+    romanticAudio.pause();
+    romanticAudio.currentTime = 45;
+    
+    // Show final message immediately
+    finalMessage.classList.remove('hidden');
+    startCountdown();
+    
+    // Hide final message after 6 seconds
+    setTimeout(() => {
+      finalMessage.classList.add('hidden');
+    }, 6000);
   });
 
   // Close modal on background click

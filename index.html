@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Will you be my Valentine?</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="container">
@@ -17,11 +17,84 @@
         <button id="noBtn" class="btn no" aria-label="No">No 💔</button>
       </div>
 
-      <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-content">
-          <h2>Yay! 💖</h2>
-          <p>I'm so happy! Thank you 😊</p>
-          <button id="closeModal" class="btn">Close</button>
+          <button id="closeModal" class="btn close-x" aria-label="Close">✕</button>
+          <h2 id="modalTitle">You're invited 💌</h2>
+          <p class="modal-sub">Pick any events you'd like to attend — click "I'm in" to RSVP.</p>
+
+          <div class="invite-summary" id="inviteSummary">Selected: <span id="selectedCount">0</span></div>
+
+          <ul class="invite-list" id="inviteList" aria-live="polite">
+            <li data-id="1">
+              <div class="event">
+                <div class="event-date">7th Feb</div>
+                <div class="event-desc">Bistro Claytopia</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="2">
+              <div class="event">
+                <div class="event-date">8th Feb</div>
+                <div class="event-desc">Hashtag 88 — dance night</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="3">
+              <div class="event">
+                <div class="event-date">9th Feb</div>
+                <div class="event-desc">Shapoorji Palonji Parkwest</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="4">
+              <div class="event">
+                <div class="event-date">10th Feb</div>
+                <div class="event-desc">Shapoorji Palonji Parkwest</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="5">
+              <div class="event">
+                <div class="event-date">11th Feb</div>
+                <div class="event-desc">Shapoorji Palonji Parkwest</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="6">
+              <div class="event">
+                <div class="event-date">12th Feb</div>
+                <div class="event-desc">MG Road stroll and Hugs at 7pm</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="7">
+              <div class="event">
+                <div class="event-date">13th Feb</div>
+                <div class="event-desc">Cubbon Park sunset and kiss at 6pm</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+
+            <li data-id="8">
+              <div class="event">
+                <div class="event-date">14th Feb</div>
+                <div class="event-desc">Beige Restaurant Marathahalli / Ebony - Barton Centre</div>
+              </div>
+              <button class="btn rsvp-btn" aria-pressed="false">I'm in</button>
+            </li>
+          </ul>
+
+          <div class="modal-actions">
+            <button id="confirmBtn" class="btn yes">Confirm selections</button>
+            <button id="cancelBtn" class="btn">Cancel</button>
+          </div>
         </div>
       </div>
     </div>

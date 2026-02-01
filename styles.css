@@ -1,9 +1,10 @@
 :root{
   --bg1: #ffdde1;
   --bg2: #fceaff;
-  --card-bg: rgba(255,255,255,0.85);
+  --card-bg: rgba(255,255,255,0.95);
   --accent: #ff4d8b;
   --muted: #6b6b6b;
+  --green: #2fc26b;
 }
 
 * { box-sizing: border-box; }
@@ -55,12 +56,12 @@ h1{
 
 .btn{
   border:0;
-  padding:12px 20px;
+  padding:10px 16px;
   border-radius:999px;
-  font-size:1.05rem;
+  font-size:1rem;
   cursor:pointer;
   user-select:none;
-  transition:transform 200ms ease, box-shadow 120ms ease;
+  transition:transform 180ms ease, box-shadow 120ms ease, background 180ms ease;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
@@ -69,7 +70,7 @@ h1{
 .yes{
   background: linear-gradient(90deg,#ff7ab6,#ff4d8b);
   color:white;
-  margin-right: 18px;
+  margin-right: 14px;
 }
 
 .no{
@@ -101,9 +102,95 @@ h1{
   background:white;
   padding:20px 26px;
   border-radius:12px;
-  text-align:center;
-  max-width:320px;
+  text-align:left;
+  max-width:560px;
+  width:92%;
   box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+  position:relative;
+}
+
+.modal-content h2{
+  margin:0 0 6px;
+  color:#8a0f60;
+}
+
+.modal-sub{
+  margin:0 0 10px;
+  color:var(--muted);
+  font-size:0.95rem;
+}
+
+.close-x{
+  position:absolute;
+  top:10px;
+  right:10px;
+  padding:6px 8px;
+  border-radius:8px;
+  background:transparent;
+  font-size:0.95rem;
+  color:var(--muted);
+  box-shadow:none;
+}
+
+.invite-summary{
+  margin:8px 0 12px;
+  font-weight:600;
+  color:#333;
+}
+
+.invite-list{
+  list-style:none;
+  padding:0;
+  margin:0 0 14px;
+  display:grid;
+  gap:10px;
+}
+
+.invite-list li{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px;
+  border-radius:10px;
+  background:linear-gradient(180deg,#fff,#fff);
+  border:1px solid rgba(0,0,0,0.04);
+}
+
+.event{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.event-date{
+  font-weight:700;
+  color:var(--accent);
+  min-width:78px;
+}
+
+.event-desc{
+  color:#333;
+}
+
+.rsvp-btn{
+  background: #f3f3f3;
+  color:#444;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,0.06);
+}
+
+.rsvp-btn.going{
+  background: var(--green);
+  color: white;
+  border-color: rgba(0,0,0,0.08);
+}
+
+.modal-actions{
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:8px;
 }
 
 .credits{

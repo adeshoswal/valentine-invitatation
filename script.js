@@ -1,16 +1,10 @@
-// Moving "No" button script + invitation RSVP behavior
+// Moving "No" button script + simplified invitation modal
 (() => {
   const noBtn = document.getElementById('noBtn');
   const yesBtn = document.getElementById('yesBtn');
   const buttonsArea = document.getElementById('buttons');
   const modal = document.getElementById('modal');
   const closeModal = document.getElementById('closeModal');
-
-  // Invitation elements
-  const inviteList = document.getElementById('inviteList');
-  const selectedCountEl = document.getElementById('selectedCount');
-  const confirmBtn = document.getElementById('confirmBtn');
-  const cancelBtn = document.getElementById('cancelBtn');
 
   // Behavior settings for "No" button
   const AVOID_DISTANCE = 140; // pixels: how close the cursor can get before the "No" moves
@@ -110,61 +104,13 @@
 
   // Show invitation modal when Yes clicked
   yesBtn.addEventListener('click', () => {
-    openModal();
+    modal.classList.remove('hidden');
   });
 
   // Close modal
   closeModal.addEventListener('click', () => {
-    closeModalFunc();
-  });
-  cancelBtn.addEventListener('click', () => {
-    closeModalFunc();
-  });
-
-  // Confirm selections
-  confirmBtn.addEventListener('click', () => {
-    const going = Array.from(inviteList.querySelectorAll('.rsvp-btn.going'))
-      .map(btn => btn.closest('li').dataset.id);
-
-    // Simple confirmation feedback
-    if (going.length === 0) {
-      alert("Thanks! Let me know which days you'd like to join 💌");
-    } else {
-      alert(`Awesome! You selected ${going.length} event(s). Can't wait 💖`);
-    }
-    closeModalFunc();
-  });
-
-  // Event delegation for RSVP buttons inside the inviteList
-  inviteList.addEventListener('click', (e) => {
-    const btn = e.target.closest('.rsvp-btn');
-    if (!btn) return;
-    const li = btn.closest('li');
-
-    const isGoing = btn.classList.toggle('going');
-    btn.setAttribute('aria-pressed', String(isGoing));
-    btn.textContent = isGoing ? 'Going ✓' : "I'm in";
-
-    updateSelectedCount();
-  });
-
-  function updateSelectedCount() {
-    const count = inviteList.querySelectorAll('.rsvp-btn.going').length;
-    selectedCountEl.textContent = String(count);
-  }
-
-  function openModal() {
-    modal.classList.remove('hidden');
-    // reset selections when opening (optional) — comment out if you want to persist
-    // inviteList.querySelectorAll('.rsvp-btn.going').forEach(b => {
-    //   b.classList.remove('going'); b.setAttribute('aria-pressed','false'); b.textContent="I'm in";
-    // });
-    updateSelectedCount();
-  }
-
-  function closeModalFunc() {
     modal.classList.add('hidden');
-  }
+  });
 
   // Listeners for pointer movement inside buttons area
   buttonsArea.addEventListener('mousemove', onMouseMove);

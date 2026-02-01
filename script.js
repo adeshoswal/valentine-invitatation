@@ -4,13 +4,21 @@
   const yesBtn = document.getElementById('yesBtn');
   const buttonsArea = document.getElementById('buttons');
   const modal = document.getElementById('modal');
-  const closeModal = document.getElementById('closeModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const sealKissBtn = document.getElementById('sealKiss');
+  const kissCanvas = document.getElementById('kissCanvas');
+
+  // Romantic audio
+  const romanticAudio = new Audio('Main Tera Boyfriend Raabta 320 Kbps.mp3');
+  romanticAudio.loop = true;
+  romanticAudio.volume = 0.3;
+  romanticAudio.currentTime = 45;
 
   // Behavior settings for "No" button
-  const AVOID_DISTANCE = 140; // pixels: how close the cursor can get before the "No" moves
-  const MOVE_PADDING = 12; // padding from edges
+  const AVOID_DISTANCE = 140;
+  const MOVE_PADDING = 12;
   let lastMove = 0;
-  const MOVE_COOLDOWN = 80; // ms between forced moves to avoid jitter
+  const MOVE_COOLDOWN = 80;
 
   function getBounds(el){
     return el.getBoundingClientRect();
@@ -85,7 +93,6 @@
     }
   }
 
-  // Initialize button position to center-right-ish
   function initPosition() {
     const btnRect = noBtn.getBoundingClientRect();
     const areaRect = buttonsArea.getBoundingClientRect();
@@ -95,7 +102,137 @@
     noBtn.style.top = `${top}px`;
   }
 
-  // "No" button playful click
+  // Typewriter effect
+  function typeWriter(text, element, speed = 100) {
+    let i = 0;
+    element.textContent = '';
+    function type() {
+      if (i < text.length) {
+        element.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      }
+    }
+    type();
+  }
+
+  // Scratch-off effect
+  function initScratchOff() {
+    const scratchItems = document.querySelectorAll('.scratch-item');
+    
+    scratchItems.forEach(item => {
+      const canvas = item.querySelector('.scratch-canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Set canvas size
+      canvas.width = item.offsetWidth;
+      canvas.height = item.offsetHeight;
+      
+      // Draw scratch-off layer
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, '#b8b8b8');
+      gradient.addColorStop(1, '#9e9e9e');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add diagonal stripes
+      ctx.strokeStyle = '#8a8a8a';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < canvas.width + canvas.height; i += 20) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(0, i);
+        ctx.stroke();
+      }
+      
+      // Add text
+      ctx.fillStyle = 'white';
+      ctx.font = 'bold 18px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0,0,0,0.3)';
+      ctx.shadowBlur = 2;
+      ctx.fillText('🎁 Scratch to reveal', canvas.width / 2, canvas.height / 2);
+      
+      let isScratching = false;
+      
+      function scratch(x, y) {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
+      function getPosition(e, canvas) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: clientX - rect.left,
+          y: clientY - rect.top
+        };
+      }
+      
+      canvas.addEventListener('mousedown', (e) => {
+        isScratching = true;
+        const pos = getPosition(e, canvas);
+        scratch(pos.x, pos.y);
+      });
+      
+      canvas.addEventListener('mousemove', (e) => {
+        if (!isScratching) return;
+        const pos = getPosition(e, canvas);
+        scratch(pos.x, pos.y);
+      });
+      
+      canvas.addEventListener('mouseup', () => isScratching = false);
+      canvas.addEventListener('mouseleave', () => isScratching = false);
+      
+      // Touch support
+      canvas.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        isScratching = true;
+        const pos = getPosition(e, canvas);
+        scratch(pos.x, pos.y);
+      });
+      
+      canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (!isScratching) return;
+        const pos = getPosition(e, canvas);
+        scratch(pos.x, pos.y);
+      });
+      
+      canvas.addEventListener('touchend', () => isScratching = false);
+    });
+  }
+
+  // Lipstick kiss mark
+  function drawKiss() {
+    kissCanvas.classList.remove('hidden');
+    kissCanvas.width = 200;
+    kissCanvas.height = 150;
+    const ctx = kissCanvas.getContext('2d');
+    
+    ctx.fillStyle = '#ff1744';
+    ctx.globalAlpha = 0.7;
+    
+    // Draw lips shape
+    ctx.beginPath();
+    ctx.ellipse(100, 60, 60, 30, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.ellipse(70, 50, 25, 20, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.ellipse(130, 50, 25, 20, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    setTimeout(() => kissCanvas.classList.add('hidden'), 3000);
+  }
+
   noBtn.addEventListener('click', () => {
     const prev = noBtn.textContent;
     noBtn.textContent = "Oh... you caught me!";
@@ -105,21 +242,30 @@
   // Show invitation modal when Yes clicked
   yesBtn.addEventListener('click', () => {
     modal.classList.remove('hidden');
+    romanticAudio.play().catch(e => console.log('Audio play failed:', e));
+    typeWriter("You're Invited 💌", modalTitle, 80);
+    initScratchOff();
   });
 
-  // Close modal
-  closeModal.addEventListener('click', () => {
-    modal.classList.add('hidden');
+  // Seal with kiss button
+  sealKissBtn.addEventListener('click', () => {
+    drawKiss();
   });
 
-  // Listeners for pointer movement inside buttons area
+  // Close modal on background click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+      romanticAudio.pause();
+      romanticAudio.currentTime = 0;
+    }
+  });
+
   buttonsArea.addEventListener('mousemove', onMouseMove);
   buttonsArea.addEventListener('touchmove', onTouchMove, { passive: true });
 
-  // Recompute initial position on load and resize
   window.addEventListener('load', initPosition);
   window.addEventListener('resize', initPosition);
 
-  // Make the No button absolute within the buttonsArea
   noBtn.style.position = 'absolute';
 })();

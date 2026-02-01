@@ -14,7 +14,9 @@
   const romanticAudio = new Audio('Main Tera Boyfriend Raabta 320 Kbps.mp3');
   romanticAudio.loop = true;
   romanticAudio.volume = 0.3;
-  romanticAudio.currentTime = 45;
+  romanticAudio.addEventListener('loadedmetadata', () => {
+    romanticAudio.currentTime = 45;
+  });
 
   // Behavior settings for "No" button
   const AVOID_DISTANCE = 140;
